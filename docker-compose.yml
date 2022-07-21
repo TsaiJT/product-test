@@ -1,0 +1,62 @@
+version: '3.5'
+
+networks:
+  product_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.180.0/24
+
+services:
+  product:
+    build:
+        context: ./product
+        dockerfile: Dockerfile.product
+    image: product_service:${PRODUCT_VERSION_TAG}
+
+    entrypoint: "sh -c"
+    command: "exit 0"
+
+
+  postgres:
+    image: postgres:14.2-alpine
+    restart: always
+    container_name: product_postgres
+    networks:
+      product_net:
+        ipv4_address: 192.168.180.9
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_CERT}
+      POSTGRES_DB: ${POSTGRES_DB}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+    volumes:
+      - /opt/product/postgres/data:/var/lib/postgresql/data
+
+
+  product_service:
+    image: product_service:${PRODUCT_VERSION_TAG}
+    restart: always
+    container_name: product_service
+    depends_on:
+      - postgres
+      - product
+    networks:
+      product_net:
+        ipv4_address: 192.168.180.112
+    ports:
+      - 8899:8899
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    volumes:
+      - /opt/product/.env:/opt/product/.env
+      - /opt/product/logs:/opt/product/runtime_log
+    command: >
+      sh -c
+      "sleep 15 && sudo chown -R 1000:1000 /opt/auth && gunicorn -b 0.0.0.0:8899 app:app"

@@ -1,5 +1,5 @@
 # built-in
-import os, datetime, uuid
+import os, uuid
 import urllib.parse
 
 
@@ -20,7 +20,7 @@ class Config(object):
     POSTGRES_CERT = os.getenv("POSTGRES_CERT")
     POSTGRES_DB = os.getenv("POSTGRES_DB")
     POSTGRES_DATABASE_URI = "postgresql://{}:{}@{}:{}/{}".format(POSTGRES_USER,
-                                                                urllib.parse.quote_plus(POSTGRES_CERT),
+                                                                urllib.parse.quote_plus(POSTGRES_CERT.encode("utf-8")),
                                                                 POSTGRES_SERVER,
                                                                 POSTGRES_PORT,
                                                                 POSTGRES_DB)

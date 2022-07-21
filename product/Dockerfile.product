@@ -3,13 +3,13 @@ LABEL   maintainer="aaa@aaa.com"
 
 USER root
 
-RUN sudo mkdir -p /opt/product
-
-COPY . /opt/product
-
 RUN set -ex \
     && apk add --no-cache \
     sudo curl openssl bash postgresql-libs libc-dev
+
+RUN sudo mkdir -p /opt/product
+
+COPY . /opt/product
 
 RUN set -ex \
     && apk add --no-cache --virtual .fetch-deps \
@@ -18,7 +18,7 @@ RUN set -ex \
     && pip install -r /opt/product/requirements.txt \
     && apk del .fetch-deps \
     && adduser -u 1000 -s /bin/bash -D testuser testuser \
-    && echo "testuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+    && echo "testuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
     && chown -R testuser:testuser /opt/product
 
 WORKDIR /opt/product

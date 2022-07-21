@@ -15,56 +15,62 @@ def add_product(name, code, category, size, unit_price, inventory, color):
         session.add(product)
         session.commit()
 
-        return True
+        return True, product.id
 
     except Exception as e:
-        log_msg("crate fail: {}".format(e))
-        return False
+        log_msg("create fail: {}".format(e))
+        return False, "{}".format(e)
 
 
-def update_product(id, name, code, category, size, unit_price, inventory, color):
+def update_product(id, **kwargs):
     try:
         product = session.query(Product).filter_by(id=id).first()
-        if name:
-            product.name = name
+    except Exception as e:
+        msg = "id not exist"
+        log_msg(msg)
+        return False, msg
 
-        if code:
-            product.code = code
+    if kwargs.get("name") is not None:
+        product.name = kwargs.get("name")
 
-        if category:
-            product.category = category
+    if kwargs.get("code") is not None:
+        product.code = kwargs.get("code")
 
-        if size:
-            product.size = size
+    if kwargs.get("category") is not None:
+        product.category = kwargs.get("category")
 
-        if isinstance(unit_price, int) and unit_price >= 0:
-            product.unit_price = unit_price
+    if kwargs.get("size") is not None:
+        product.size = kwargs.get("size")
 
-        if isinstance(inventory, int) and inventory >= 0:
-            product.inventory = inventory
+    if isinstance(kwargs.get("unit_price"), int) and kwargs.get("unit_price") >= 0:
+        product.unit_price = kwargs.get("unit_price")
 
-        if color:
-            product.color = color
+    if isinstance(kwargs.get("inventory"), int) and kwargs.get("inventory") >= 0:
+        product.inventory = kwargs.get("inventory")
 
+    if kwargs.get("color") is not None:
+        product.color = kwargs.get("color")
+
+    try:
         session.commit()
-
-        retrun True
-
+        return True, ""
     except Exception as e:
         log_msg("update fail: {}".format(e))
-        return False
+        return False, "{}".format(e)
+
+
 
 
 def get_product(id):
     try:
         product = session.query(Product).filter_by(id=id).first()
         val = {
-            "name": product.name
-            "code": product.code
-            "category": product.category
-            "size": product.size
-            "unit_price": product.unit_price
-            "inventory": product.inventory
+            "name": product.name,
+            "code": product.code,
+            "category": product.category,
+            "size": product.size,
+            "unit_price": product.unit_price,
+            "inventory": product.inventory,
             "color": product.color
         }
 

@@ -2,15 +2,16 @@
 import uuid
 
 # 3rd
-from sqlalchemy import create_engine, Integer, Column, Sequence, String, DateTime, Boolean, Table, ForeignKey
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import create_engine, Integer, Column, String, DateTime
 from sqlalchemy.sql import func
-from sqlalchemy.orm import sessionmaker, relationship, backref
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 # module
 from flask_app import app
 
+def generate_uuid():
+    return uuid.uuid4().hex
 
 Base = declarative_base()
 
@@ -18,7 +19,7 @@ Base = declarative_base()
 class Product(Base):
     __tablename__ = "products"
 
-    id = Column(String(255), primary_key=True)
+    id = Column(String(255), primary_key=True, default=generate_uuid)
     name = Column(String(255), nullable=False)
     code = Column(String(255), nullable=False)
     category = Column(String(255), nullable=False)

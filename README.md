@@ -1,5 +1,6 @@
-# table schema
-* each attribute is not nullable
+# Table schema
+* Each attribute is not nullable
+
 ![image](https://user-images.githubusercontent.com/15087421/182535663-ab361591-5d54-4356-89a2-948733b89b23.png)
 
 
@@ -27,6 +28,7 @@ curl -XPOST -H "Content-Type:application/json" 192.168.180.112:8899/products -d 
 }'
 ```
 
+
 ## update
 ```
 curl -XPUT -H "Content-Type:application/json" 192.168.180.112:8899/products/9231370afd44460eba5922687b4f8940 -d '{
@@ -39,7 +41,6 @@ curl -XPUT -H "Content-Type:application/json" 192.168.180.112:8899/products/9231
 ```
 curl -XGET 192.168.180.112:8899/products/9231370afd44460eba5922687b4f8940
 ```
-
 
 
 ## delete

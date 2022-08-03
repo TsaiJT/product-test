@@ -1,3 +1,10 @@
+# Project
+* a example to display RESTful API with flask.
+* use postgreSQL to store data.
+* simple crud operation for product service.
+* use docker to package the service for convenient to deploy.
+
+
 # Table schema
 * Each attribute is not nullable
 

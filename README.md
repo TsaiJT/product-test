@@ -1,3 +1,8 @@
+# table schema
+* each attribute is not nullable
+![image](https://user-images.githubusercontent.com/15087421/182535663-ab361591-5d54-4356-89a2-948733b89b23.png)
+
+
 # ENV
 ENV: linux-base env
 localhost package: docker, docker-compose
